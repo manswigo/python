@@ -5,10 +5,11 @@
 import json
 import matplotlib.pyplot as plt
 import math
+import funktion
 graf = True
 
 #Läser in filen
-with open('kaffeTeData.json', 'r') as f:
+with open('kaffeTeData_test.json', 'r') as f:
     x, y, z = json.load(f)
 
 #Skapar x-labels
@@ -51,20 +52,13 @@ ax2.legend(lines + lines2, labels + labels2, loc='lower center', facecolor='xkcd
 
 ax1.grid()  #Skapar rutnätet
 fig.tight_layout()  #Gör så figuren får bättre plats
-#Skriver ut tabellen
-te_sum = 0  #Skapar summan
-print(f'''Ackumulerad tekonsumtion
-[kg/person sedan {x[0]} 
-===========================''') #Skriver texten baserat på det första årtalet
-for i in range(0, len(x)):
-    te_sum += z[i]  #Adderar årets snittkonsumtion till totala summan
-    if i % 5 == 0 or i == 0 or i == len(x)-1:  #Skriver ut den nuvarande summan vart femte samt första och sista året
-        print(f'{x[i]}\t{te_sum: .2f}\n')
 
-print('===========================')
+#Skriver ut tabellen
+funktion.tabell(x, z)
 
 if graf:    #Väljer om grafen visas eller sparas till png
     plt.show()  #Visar
 else:
     plt.savefig('fig_inl2.png') #Sparar till png(https://stackoverflow.com/questions/9622163/save-plot-to-image-file-instead-of-displaying-it)
+
 

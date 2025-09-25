@@ -1,40 +1,38 @@
-
+#Måns Persson 05-12-24 Lucas Ödmar 05-07-03
+#Program som läser in en fil med två datamängder över ett intervall med år. Plottar sedan datans grafer samt skriver ut en tabell
 
 
 #Importerar nödvändiga moduler och låter användaren bestämma om grafen skall visas eller sparas
 import json
 import matplotlib.pyplot as plt
 import math
-import funktion
-graf = True
+import func
+visa = True
 
 #Läser in filen
-with open('kaffeTeData_test.json', 'r') as f:
+with open('kaffeTeData.json', 'r') as f:
     x, y, z = json.load(f)
 
 #Skapar x-labels
-xlabels = []
-for i in range(0, len(x), 10): #Lägger till var tionde år i x-labels
-    xlabels.append(x[i])
+xlabels = func.xlabels(x)
 
 fig, ax1 = plt.subplots()   #Skapar första grafen
 ax2 = ax1.twinx()   #Skapar andra grafen på samma figur men med separat y-axel (https://python-graph-gallery.com/line-chart-dual-y-axis-with-matplotlib/)
 
 #Bestämmer storleken på siffrorna längs y-axeln
-ax1.set_ylim(0, math.ceil(max(y)))  #Avrundar högsta värdet till närmsta högre heltal
+ax1.set_ylim(0, math.ceil(max(y)))    #Avrundar högsta värdet till närmsta högre heltal
 ax2.set_ylim(0.0, round(max(z)+0.05, 1))    #Avrundar högsta värdet till närmsta högre tiondel
 
 #Skapar, namnger och sätter färg samt tjocklek på graferna
-ax1.plot(x, y, 'b', label='kaffe', linewidth=2.5)
-ax2.plot(x, z, 'm', label='te', linewidth=2.5)
+ax1.plot(x, y, 'b', label='kaffe', linewidth=2.0)
+ax2.plot(x, z, 'm', label='te', linewidth=2.0)
 
 
-ax1.set_title(f'Konsumtion i Sverige {x[0]}-{x[-1]}') #Sätter titeln beroende på första och sista värdet i årslistan
+ax1.set_title(f'Konsumtion i Sverige {x[0]}-{x[-1]}')    #Sätter titeln beroende på första och sista värdet i årslistan
 
 #Sätter så att årtalen är placerade på det värde de representerar (https://stackoverflow.com/questions/10998621/rotate-axis-tick-labels)
-xticks = xlabels
-ax1.set_xticks(xticks) 
-ax1.set_xticklabels(xticks, rotation=40) 
+ax1.set_xticks(xlabels) 
+ax1.set_xticklabels(xlabels, rotation=40) 
 
 #Sätter y och x label
 ax1.set_ylabel('kaffe\n[kg per persson och år]', color='blue', fontsize = 16)     
@@ -48,17 +46,17 @@ ax2.tick_params(axis='y', colors='magenta')
 #Sätter båda graferna i en inforuta (Båda grafer på en legend: (https://stackoverflow.com/questions/5484922/secondary-axis-with-twinx-how-to-add-to-legend/10129461#10129461))
 lines, labels = ax1.get_legend_handles_labels()
 lines2, labels2 = ax2.get_legend_handles_labels()
-ax2.legend(lines + lines2, labels + labels2, loc='lower center', facecolor='xkcd:pale green', markerscale=2, fontsize=12, borderpad=1.0, labelspacing=1.0) #ChatGPT('how do i change the colour of a legend box in matplotlib') samt ('how do i change the size of it')
+ax2.legend(lines + lines2, labels + labels2, loc='lower center', facecolor='xkcd:pale green', markerscale=2, fontsize=12, borderpad=0.3, labelspacing=0.3)    #ChatGPT('how do i change the colour of a legend box in matplotlib') samt ('how do i change the size of it')
 
-ax1.grid()  #Skapar rutnätet
-fig.tight_layout()  #Gör så figuren får bättre plats
+ax1.grid()    #Skapar rutnätet
+fig.tight_layout()    #Gör så figuren får bättre plats
 
 #Skriver ut tabellen
-funktion.tabell(x, z)
+func.tabell(x, z)
 
-if graf:    #Väljer om grafen visas eller sparas till png
-    plt.show()  #Visar
+if visa:    #Väljer om grafen visas eller sparas till png
+    plt.show()    #Visar
 else:
-    plt.savefig('fig_inl2.png') #Sparar till png(https://stackoverflow.com/questions/9622163/save-plot-to-image-file-instead-of-displaying-it)
+    plt.savefig('fig_inl2.png')    #Sparar till png(https://stackoverflow.com/questions/9622163/save-plot-to-image-file-instead-of-displaying-it)
 
 

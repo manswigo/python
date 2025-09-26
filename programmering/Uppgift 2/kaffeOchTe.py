@@ -1,0 +1,70 @@
+
+
+
+#Importerar nödvändiga moduler och låter användaren bestämma om grafen skall visas eller sparas
+import json
+import matplotlib.pyplot as plt
+import math
+graf = True
+
+#Läser in filen
+with open('kaffeTeData.json', 'r') as f:
+    x, y, z = json.load(f)
+
+#Skapar x-labels
+xlabels = []
+for i in range(0, len(x), 10): #Lägger till var tionde år i x-labels
+    xlabels.append(x[i])
+
+fig, ax1 = plt.subplots()   #Skapar första grafen
+ax2 = ax1.twinx()   #Skapar andra grafen på samma figur men med separat y-axel (https://python-graph-gallery.com/line-chart-dual-y-axis-with-matplotlib/)
+
+#Bestämmer storleken på siffrorna längs y-axeln
+ax1.set_ylim(0, math.ceil(max(y)))  #Avrundar högsta värdet till närmsta högre heltal
+ax2.set_ylim(0.0, round(max(z)+0.05, 1))    #Avrundar högsta värdet till närmsta högre tiondel
+
+#Skapar, namnger och sätter färg samt tjocklek på graferna
+ax1.plot(x, y, 'b', label='kaffe', linewidth=2.5)
+ax2.plot(x, z, 'm', label='te', linewidth=2.5)
+
+
+ax1.set_title(f'Konsumtion i Sverige {x[0]}-{x[-1]}') #Sätter titeln beroende på första och sista värdet i årslistan
+
+#Sätter så att årtalen är placerade på det värde de representerar (https://stackoverflow.com/questions/10998621/rotate-axis-tick-labels)
+xticks = xlabels
+ax1.set_xticks(xticks) 
+ax1.set_xticklabels(xticks, rotation=40) 
+
+#Sätter y och x label
+ax1.set_ylabel('kaffe\n[kg per persson och år]', color='blue', fontsize = 16)     
+ax2.set_ylabel('te\n[kg per persson och år]', color='magenta', fontsize = 16)
+ax1.set_xlabel('år', fontsize=20)
+
+#Ändrar färgen på siffrorna längs y-axeln (ChatGPT('hur ändrar man färgen på siffrorna som representerar yvärdet i matplotlib'))
+ax1.tick_params(axis='y', colors='blue')
+ax2.tick_params(axis='y', colors='magenta')
+
+#Sätter båda graferna i en inforuta (Båda grafer på en legend: (https://stackoverflow.com/questions/5484922/secondary-axis-with-twinx-how-to-add-to-legend/10129461#10129461))
+lines, labels = ax1.get_legend_handles_labels()
+lines2, labels2 = ax2.get_legend_handles_labels()
+ax2.legend(lines + lines2, labels + labels2, loc='lower center', facecolor='xkcd:pale green', markerscale=2, fontsize=12, borderpad=1.0, labelspacing=1.0) #ChatGPT('how do i change the colour of a legend box in matplotlib') samt ('how do i change the size of it')
+
+ax1.grid()  #Skapar rutnätet
+fig.tight_layout()  #Gör så figuren får bättre plats
+#Skriver ut tabellen
+te_sum = 0  #Skapar summan
+print(f'''Ackumulerad tekonsumtion
+[kg/person sedan {x[0]} 
+===========================''') #Skriver texten baserat på det första årtalet
+for i in range(0, len(x)):
+    te_sum += z[i]  #Adderar årets snittkonsumtion till totala summan
+    if i % 5 == 0 or i == 0 or i == len(x)-1:  #Skriver ut den nuvarande summan vart femte samt första och sista året
+        print(f'{x[i]}\t{te_sum: .2f}\n')
+
+print('===========================')
+
+if graf:    #Väljer om grafen visas eller sparas till png
+    plt.show()  #Visar
+else:
+    plt.savefig('fig_inl2.png') #Sparar till png(https://stackoverflow.com/questions/9622163/save-plot-to-image-file-instead-of-displaying-it)
+

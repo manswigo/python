@@ -11,4 +11,3 @@ data = [
 df = pd.DataFrame(data, columns=['Namn', 'Ålder', 'Stad'])
 print(df)
 print(df[df['Ålder'] > 30]['Namn'])
-print(df[df['Namn']])

@@ -1,3 +1,4 @@
 marran 50 50 50
 shuno1 43 32
 shuno2 1 4 8 9
+jonas andersson 34 100 56

@@ -1,19 +1,23 @@
 mest = 0
 current = ''
-namnen = []
-minuterna = []
+namnen = ''
+minuterna = 0
 with (open('tid.txt', 'r') as f1):
     for rad in f1:
         ord = rad.split()
-        for i in range(0, 2):
-            namnen.append(ord[i])
-        for i in range(2, len(ord)):
-            minuterna.append(int(ord[i]))
-        if sum(minuterna) > mest:
-            mest = sum(minuterna)
-            current = ' '.join(namnen)
-            current += str(sum(minuterna))
+        
+        namnen = ''
+        minuterna = 0
+        for i in range(0, len(ord)):
+            if ord[i].isdecimal():
+                minuterna += int(ord[i])
+            else:
+                namnen += (ord[i]+' ')
+        if minuterna > mest:
+            mest = minuterna
+            current = namnen
+   
         
 f1.close()
-print(current)
+print(f'{current}{mest}')
         

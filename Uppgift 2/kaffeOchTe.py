@@ -7,7 +7,7 @@ import json
 import matplotlib.pyplot as plt
 import math
 import func
-visa = False
+visa = True
 
 #Läser in filen
 with open('kaffeTeData_test.json', 'r') as f:
@@ -28,8 +28,8 @@ ax1.plot(x, y, 'b', label='kaffe', linewidth=2.0)
 ax2.plot(x, z, 'm', label='te', linewidth=2.0)
 
 
-ax1.set_title(f'Konsumtion i Sverige {x[0]}-{x[-1]}')    #Sätter titeln beroende på första och sista värdet i årslistan
-
+ax1.set_title(f'Konsumtion i Sverige {x[0]}-{x[-1]}', fontname='Times New Roman', fontsize= 20)    #Sätter titeln beroende på första och sista värdet i årslistan
+#plt.title(f'Konsumtion i Sverige {x[0]}-{x[-1]}')
 #Sätter så att årtalen är placerade på det värde de representerar (https://stackoverflow.com/questions/10998621/rotate-axis-tick-labels)
 ax1.set_xticks(xlabels) 
 ax1.set_xticklabels(xlabels, rotation=40) 

@@ -95,19 +95,19 @@ class ThreeGram:
 def read_textfile(filepath):
     text = ''
     with open(filepath, 'r', encoding='utf-8') as f:
-        skip_line = True
+        skip_line = False
         for line in f.readlines():
-            if 'START OF THE PROJECT GUTENBERG' in line:
+            '''if 'START OF THE PROJECT GUTENBERG' in line:
                 skip_line = False
                 continue
             if 'END OF THE PROJECT GUTENBERG' in line:
-                skip_line = True
+                skip_line = True'''
             if not skip_line:
                 text += line
     return text
 
-text = read_textfile('sherlock_holmes.txt')
+text = read_textfile('training_corpus_20000.txt')
 
 lm = ThreeGram()
 lm.train(text)
-print(lm.generate_text('fuck your mother', length=50))
+print(lm.generate_text('horunge', length=500))
